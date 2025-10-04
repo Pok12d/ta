@@ -3189,7 +3189,7 @@ var UnityLoader = UnityLoader || {
     processAsmFrameworkJob: function(e, t) {
         var r = UnityLoader.Job.result(e, "downloadAsmFramework");
         UnityLoader.loadCode(e, r, (function(r, n) {
-            t.complete()
+            
             e.isModularized && (e.mainScriptUrlOrBlob = n,
             UnityLoader[r] = UnityModule),
             UnityLoader[r](e),
