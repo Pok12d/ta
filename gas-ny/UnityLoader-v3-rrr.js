@@ -3100,40 +3100,40 @@ var UnityLoader = UnityLoader || {
     },
     Blobs: {},
     loadCode: function(e, t, r, n) {
-    var o = [].slice.call(UnityLoader.Cryptography.md5(t))
-        .map(function(e){ return ("0" + e.toString(16)).substr(-2); })
-        .join("");
-
-    var a = document.createElement("script");
-
-    var i = (n.isModularized 
-        ? function(e){ return new Blob([e], { type: "application/javascript" }); }
-        : function(e, t){ return new Blob(['UnityLoader["' + t + '"]=' + e], { type: "text/javascript" }); }
-    )(t, o);
-
-    var s = URL.createObjectURL(i);
-
-    UnityLoader.Blobs[s] = n;
-    e.deinitializers.push(function() {
-        delete UnityLoader.Blobs[s];
-        delete UnityLoader[o];
-        var el = document.getElementById(o);
-        if (el) document.body.removeChild(el);
-    });
-
-    var scriptSrc = i.size < 1024 * 1024 ? "blob.js" : s;
-
-    a.src = scriptSrc;
-    a.id = o;
-    a.onload = function() {
-        if (!e.developmentBuild) URL.revokeObjectURL(s);
-        r(o, i);
-        delete a.onload;
-    };
-
-    document.body.appendChild(a);
-},
-
+        var o = [].slice.call(UnityLoader.Cryptography.md5(t)).map((function(e) {
+            return ("0" + e.toString(16)).substr(-2)
+        }
+        )).join("")
+          , a = document.createElement("script")
+          , i = (n.isModularized ? function(e) {
+            return new Blob([e],{
+                type: "application/javascript"
+            })
+        }
+        : function(e, t) {
+            return new Blob(['UnityLoader["' + t + '"]=', e],{
+                type: "text/javascript"
+            })
+        }
+        )(t, o)
+          , s = URL.createObjectURL(i);
+        UnityLoader.Blobs[s] = n,
+        e.deinitializers.push((function() {
+            delete UnityLoader.Blobs[s],
+            delete UnityLoader[o],
+            document.body.removeChild(document.getElementById(o))
+        }
+        )),
+        a.src = i.size < 1024 * 1024 ? "blob.js" : s,
+        a.id = o,
+        a.onload = function() {
+            e.developmentBuild || URL.revokeObjectURL(s),
+            r(o, i),
+            delete a.onload
+        }
+        ,
+        document.body.appendChild(a)
+    },
     setupIndexedDBJob: function(e, t) {
         function r(n) {
             r.called || (r.called = !0,
