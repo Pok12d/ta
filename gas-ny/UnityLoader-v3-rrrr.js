@@ -3235,16 +3235,16 @@ var UnityLoader = UnityLoader || {
     },
     downloadJob: function(e, t) {
 
-        if (t?.parameters?.url) {
+       if (t?.parameters?.url) {
   t.parameters.url = t.parameters.url
-    .replace(/(?:blob:(?:null|https?:\/\/[^/]+)\/)+/gi, match => {
-      const last = match.split('/').filter(Boolean).pop();
-      if (/^https?:\/\//i.test(last)) return `blob:${last}/`;
-      return 'blob:null/';
-    })
+    
+    .replace(/(?:blob:(null|https?:\/\/[^/]+)\/)+/gi, (match, p1) => `blob:${p1}/`)
+   
     .replace(/((https?:\/\/[a-z0-9.-]+)(\/\2)+)/gi, '$2')
+   
     .replace(/([^:]\/)\/+/g, '$1');
 }
+
 
         
         var r = t.parameters.objParameters ? new UnityLoader.UnityCache.XMLHttpRequest(t.parameters.objParameters) : new XMLHttpRequest;
