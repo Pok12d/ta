@@ -119,6 +119,9 @@ const RELAY_WSS = "wss://relay-lx0q.onrender.com/intercept";
   function isExitGamesUrl(url) {
     try {
       const u = new URL(url, location.href);
+
+    console.log(/\.?exitgames\.com$/i.test(u.hostname))
+      
       return /\.?exitgames\.com$/i.test(u.hostname);
     } catch (e) { return false; }
   }
