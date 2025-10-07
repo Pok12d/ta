@@ -1,5 +1,3 @@
-
-
 const RELAY_WSS = "wss://relay-lx0q.onrender.com/intercept"; 
 
 ;(function(){
@@ -33,22 +31,28 @@ const RELAY_WSS = "wss://relay-lx0q.onrender.com/intercept";
   function connectRelay() {
     relay = new WebSocket(RELAY_WSS);
     relay.binaryType = "arraybuffer";
+
     relay.addEventListener("open", () => {
       console.log("[proxy-client] relay connected");
       readyPromiseResolve();
       // flush queue
       while (pendingQueue.length) relay.send(JSON.stringify(pendingQueue.shift()));
     });
+
     relay.addEventListener("message", (ev) => {
-      // all relay <-> client control messages are JSON text
       let msg;
       try { msg = JSON.parse(typeof ev.data === "string" ? ev.data : new TextDecoder().decode(ev.data)); }
       catch (e) { console.error("[proxy-client] invalid relay message", e); return; }
 
+      // ---- NEW: show debug messages from relay ----
+      if (msg.type === "debug" && msg.message) {
+        console.log("[relay debug]", msg.message);
+      }
+
       const { type, connId, payload, reason, code } = msg;
       const stub = stubs.get(connId);
       if (!stub) {
-        console.warn("[proxy-client] unknown connId", connId, msg);
+        if (type !== "debug") console.warn("[proxy-client] unknown connId", connId, msg);
         return;
       }
 
@@ -57,7 +61,6 @@ const RELAY_WSS = "wss://relay-lx0q.onrender.com/intercept";
         if (typeof stub.onopen === "function") stub.onopen({ target: stub });
         stub.dispatchEvent && stub.dispatchEvent(new Event("open"));
       } else if (type === "message") {
-        // payload may be text or base64 binary (with .isBinary flag)
         if (msg.isBinary) {
           const ab = base64ToArrayBuffer(payload);
           const evObj = { data: ab };
@@ -80,9 +83,9 @@ const RELAY_WSS = "wss://relay-lx0q.onrender.com/intercept";
         stub.dispatchEvent && stub.dispatchEvent(Object.assign(new Event("error"), evObj));
       }
     });
+
     relay.addEventListener("close", () => {
       console.warn("[proxy-client] relay closed, will reconnect in 2s");
-      // notify all stubs
       for (const [connId, stub] of stubs) {
         if (stub._readyState !== 3) {
           stub._readyState = 3;
@@ -91,9 +94,9 @@ const RELAY_WSS = "wss://relay-lx0q.onrender.com/intercept";
         }
       }
       setTimeout(connectRelay, 2000);
-      // create new ready promise
       readyPromise = new Promise((res) => { readyPromiseResolve = res; });
     });
+
     relay.addEventListener("error", (e) => {
       console.error("[proxy-client] relay error", e);
       try { relay.close(); } catch(e){}
@@ -110,27 +113,21 @@ const RELAY_WSS = "wss://relay-lx0q.onrender.com/intercept";
     }
   }
 
-  // ---- manage multiple stub sockets ----
   const stubs = new Map(); // connId => stub
   let nextConnId = 1;
   function genConnId(){ return "c" + (nextConnId++); }
 
-  // ---- helper to detect exitgames hosts ----
   function isExitGamesUrl(url) {
     try {
       const u = new URL(url, location.href);
-
-    console.log(/\.?exitgames\.com$/i.test(u.hostname))
-      
+      console.log(/\.?exitgames\.com$/i.test(u.hostname));
       return /\.?exitgames\.com$/i.test(u.hostname);
     } catch (e) { return false; }
   }
 
-  // ---- Override WebSocket constructor ----
   const NativeWebSocket = window.WebSocket;
 
   function ProxyWebSocket(url, protocols) {
-    // If not exitgames target, return native
     try {
       if (!isExitGamesUrl(url)) {
         return protocols === undefined ? new NativeWebSocket(url) : new NativeWebSocket(url, protocols);
@@ -141,45 +138,29 @@ const RELAY_WSS = "wss://relay-lx0q.onrender.com/intercept";
     }
 
     const connId = genConnId();
-    const stub = new EventTarget(); // we will attach convenience props below
+    const stub = new EventTarget();
     stub._connId = connId;
     stub._url = url;
     stub._protocols = protocols;
     stub._readyState = 0; // CONNECTING
 
-    // convenience callbacks
     stub.onopen = null;
     stub.onmessage = null;
     stub.onclose = null;
     stub.onerror = null;
 
-    // event target compatibility: addEventListener/removeEventListener/dispatchEvent already from EventTarget
-
-    // send / close
     stub.send = function(data) {
-      if (stub._readyState === 3) {
-        throw new Error("WebSocket is closed");
-      }
-      // handle string vs binary
-      if (typeof data === "string") {
-        sendControl({ type: "send", connId, isBinary: false, payload: data });
-      } else if (data instanceof ArrayBuffer || ArrayBuffer.isView(data)) {
+      if (stub._readyState === 3) throw new Error("WebSocket is closed");
+      if (typeof data === "string") sendControl({ type: "send", connId, isBinary: false, payload: data });
+      else if (data instanceof ArrayBuffer || ArrayBuffer.isView(data)) {
         const ab = data instanceof ArrayBuffer ? data : data.buffer;
-        const b64 = arrayBufferToBase64(ab);
-        sendControl({ type: "send", connId, isBinary: true, payload: b64 });
+        sendControl({ type: "send", connId, isBinary: true, payload: arrayBufferToBase64(ab) });
       } else if (data instanceof Blob) {
-        // read blob as arraybuffer
         const reader = new FileReader();
-        reader.onload = function() {
-          const ab = reader.result;
-          const b64 = arrayBufferToBase64(ab);
-          sendControl({ type: "send", connId, isBinary: true, payload: b64 });
-        };
+        reader.onload = () => sendControl({ type: "send", connId, isBinary: true, payload: arrayBufferToBase64(reader.result) });
         reader.readAsArrayBuffer(data);
       } else {
-        // fallback stringify
-        try { sendControl({ type: "send", connId, isBinary:false, payload: JSON.stringify(data) }); }
-        catch(e){ console.warn("[proxy-client] unknown send type", e); }
+        try { sendControl({ type: "send", connId, isBinary:false, payload: JSON.stringify(data) }); } catch(e){ console.warn("[proxy-client] unknown send type", e); }
       }
     };
 
@@ -187,20 +168,16 @@ const RELAY_WSS = "wss://relay-lx0q.onrender.com/intercept";
       if (stub._readyState === 3) return;
       stub._readyState = 3;
       sendControl({ type: "close", connId, code: code || 1000, reason: reason || "client close" });
-      // fire close locally
       typeof stub.onclose === "function" && stub.onclose({ code: code || 1000, reason: reason || "client close" });
       stub.dispatchEvent && stub.dispatchEvent(Object.assign(new Event("close"), { code: code || 1000, reason: reason || "client close" }));
       stubs.delete(connId);
     };
 
-    // Register stub and request server to open target
     stubs.set(connId, stub);
-    // wait for relay ready then send open request
     readyPromise.then(()=> {
       sendControl({ type: "open", connId, target: url, protocols: protocols });
     });
 
-    // Return stub that mostly looks like WebSocket
     Object.defineProperty(stub, "readyState", { get: () => stub._readyState });
     Object.defineProperty(stub, "url", { get: () => stub._url });
     Object.defineProperty(stub, "protocol", { get: () => stub._protocols });
@@ -208,10 +185,7 @@ const RELAY_WSS = "wss://relay-lx0q.onrender.com/intercept";
     return stub;
   }
 
-  // Ensure ProxyWebSocket.prototype matches native to keep 'instanceof' false but usable
   ProxyWebSocket.prototype = NativeWebSocket.prototype;
-
-  // Replace global WebSocket
   window.WebSocket = ProxyWebSocket;
 
   console.log("[proxy-client] installed exitgames ws proxy. Relay:", RELAY_WSS);
