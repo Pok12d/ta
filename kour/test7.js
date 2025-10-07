@@ -1,4 +1,4 @@
-const RELAY_WSS = "wss://your-relay-server.onrender.com/intercept";
+const RELAY_WSS = "wss://relay-lx0q.onrender.com/intercept";
 
 (function(){
   if (window.__exitgames_ws_proxy_installed) return;
