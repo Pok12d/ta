@@ -61,7 +61,12 @@ const RELAY_WSS = "wss://relay-lx0q.onrender.com/intercept";
     }
 
     const connId = genConnId();
-    const stub = { _connId: connId, onopen:null, onmessage:null, onclose:null, onerror:null };
+    const stub = { 
+      _connId: connId, 
+      onopen:null, onmessage:null, onclose:null, onerror:null,
+      binaryType: "arraybuffer",
+      readyState: 0 // CONNECTING
+    };
 
     stub.send = (msg) => sendRelay({ 
       type:"send", 
@@ -71,6 +76,11 @@ const RELAY_WSS = "wss://relay-lx0q.onrender.com/intercept";
         ? btoa(String.fromCharCode(...new Uint8Array(msg))) 
         : msg 
     });
+
+    stub.close = (code, reason) => {
+      sendRelay({ type:"close", connId, code, reason });
+      stub.readyState = 3; // CLOSED
+    };
 
     stubs.set(connId, stub);
     sendRelay({ type:"open", connId, target:url, protocols });
