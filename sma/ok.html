@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <base href = "https://cdn.jsdelivr.net/gh/Pok12d/ta@main/sma/">
+	<script src="scripts/constants.js"></script>
+	
+	
+	<meta charset="utf-8">
+	<link rel="icon" href="images/favicon.png" sizes="16x16">
+	<!-- og: Open graph meta tags allow you to control what content shows up when a page is shared on Facebook -->
+	<meta property="og:site_name" content="SmashKarts.io">
+	<meta property="og:title" content="Smash Karts" />
+	<meta property="og:url" content="https://smashkarts.io/" />
+	<meta property="og:type" content="website" />
+	<meta property="og:description"
+		  content="Smash Karts is a free io Multiplayer Kart Battle Arena game. Drive fast. Fire rockets. Make big explosions." />
+	<meta property="og:image" content="images/icon-144.png" />
+	<meta property="og:image:width" content="144" />
+	<meta property="og:image:height" content="144" />
+	<meta itemprop="name" content="Smash Karts" />
+	<meta itemprop="url" content="https://smashkarts.io/" />
+	<meta itemprop="description"
+		  content="Smash Karts is a free io Multiplayer Kart Battle Arena game. Drive fast. Fire rockets. Make big explosions." />
+	<meta itemprop="thumbnailUrl" content="https://smashkarts.io/" />
+	<link rel="image_src" href="https://smashkarts.io/" />
+	<meta itemprop="image" content="https://smashkarts.io/" />
+	<meta name="twitter:title" content="Smash Karts" />
+	<meta name="twitter:image" content="images/icon-144.png" />
+	<meta name="twitter:url" content="https://smashkarts.io/" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:description"
+		  content="Smash Karts is a free io Multiplayer Kart Battle Arena game. Drive fast. Fire rockets. Make big explosions." />
+	<meta name="description"
+		  content="Smash Karts is a free io Multiplayer Kart Battle Arena game. Drive fast. Fire rockets. Make big explosions." />
+	<meta name="google-site-verification" content="Kb9JniKgGSfuiJM_DNO2-Va7cSC00GlcBzbDw1Lgw_4" />
+	<meta itemprop="image primaryImageOfPage" content="images/smashkarts.png" />
+
+	<link rel="manifest" href="manifest.json">
+
+	<meta name="apple-mobile-web-app-title" content="Smash Karts">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<link rel="apple-touch-icon" href="images/icon-144.png">
+
+	<!-- <script type="text/javascript" src="xmlhttprequest-length-computable.js"></script> -->
+	<!--<script type="text/javascript" src="xmlhttprequest-length-computable.min.js"></script>
+	<script type="text/javascript">
+		window.xmlHTTPRequestLengthComputable = {
+			CONTENT_ENCODING_MULTIPLE: 3.0
+		}
+	</script> -->
+	
+	<!-- Youtube Game Schema -->
+	<script type="application/ld+json">
+		{
+			"@context": "http://schema.org",
+			"@type":"VideoGame",
+			"publisher": "Tall Team",
+			"name":[
+				{
+					"@language":"en",
+					"@value":"Smash Karts"
+				}
+			],
+			"description":[
+				{
+					"@language":"en",
+					"@value":"Smash Karts is a free io Multiplayer Kart Battle Arena game. Drive fast. Fire rockets. Make big explosions."
+				}
+			],
+			"applicationCategory":[
+				"Game"
+			],
+			"operatingSystem":[
+				"WEB"
+			],
+			"genre":[
+				"Car Battle",
+				"Shooter",
+				"Multiplayer"
+			],
+			"url":"https://smashkarts.io/",
+			"image":"images/SmashKartsPoster.jpg",
+			"screenshot":"images/SmashKartsBackground.jpg"
+		}
+	</script>
+
+	<link rel="stylesheet" href="css/main.css" />
+	<meta name="viewport" content="minimal-ui, user-scalable=no, initial-scale=1, maximum-scale=1, width=device-width, viewport-fit=cover" />
+
+	<script src="scripts/ads-init.js"></script>	
+</head>
+
+<body>
+<div id="mainContainer">
+	<div id="gameContainer">
+		<div id="gameCanvasWrapper">
+			<canvas id="gameCanvas"></canvas>
+		</div>
+
+		<!-- On canvas ad containers -->
+		<div id="adContainerLoadingLeft"> <!-- loading -->
+			<div id="smashkarts-io_300x600_2"></div> <!-- adinplay -->
+		</div>
+		<div id="adContainerMainMenu"> <!-- main menu -->
+			<div id="smashkarts-io_300x250"></div> <!-- adinplay -->
+
+			<!-- playwire -->
+			<div id="pw_mainmenu"></div>
+			<!-- dummy placement to ensure rewarded videos init correctly when ads are disabled for season pass holders -->
+			<div id="pw_mainmenu_dummy" data-pw-desk="med_rect_atf" data-pw-mobi="med_rect_atf"></div>
+		</div>
+		<div id="adContainerWin"> <!-- win ceremony -->
+			<div id="smashkarts-io_300x250_2"></div> <!-- adinplay -->
+
+			<!-- playwire -->
+			<div id="pw_roundend"></div>
+			<!-- <div data-pw-desk="med_rect_btf" data-pw-mobi="med_rect_btf"></div> -->
+		</div>
+		<div id="adContainerSpectate"> <!-- spectate -->
+			<div id="smashkarts-io_300x250_3"></div> <!-- adinplay -->
+		</div>
+		<div id="adContainerDeath"> <!-- death -->
+
+			<!-- adinplay -->
+			<div id="smashkarts-io_728x90-new"></div>
+			<div id="smashkarts-io_320x100"></div>
+
+			<!-- playwire -->
+			<div id="pw_ondeath"></div>
+			<!-- <div data-pw-desk="leaderboard_atf" data-pw-mobi="leaderboard_atf"></div> -->
+		</div>
+	</div>
+	<div id="pw-video-container"> <!-- playwire -->
+		<div id="pw-video-placeholder"></div>
+	</div>
+	<div id="preroll"></div> <!-- adinplay -->
+	<iframe id="xsolla-iframe"></iframe>
+</div>
+<div id="loader">
+	<img class="logo" src="images/smashkarts.png">
+	<div class="spinner"></div>
+	<div class="progress">
+		<div class="full"></div>
+	</div>
+</div>
+<div id="rotate-landscape">
+	<img src="images/r.png" class="center">
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.9.3/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.9.3/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.9.3/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.9.3/firebase-analytics-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.9.3/firebase-functions-compat.js"></script>
+
+<script src="scripts/main.js"></script>
+<script src="scripts/auth.js"></script>
+<script src="scripts/shop.js"></script>
+<script src="scripts/cc.js"></script>
+ 
+<script src="scripts/ads-common-logic.js"></script>
+<!--<script src="scripts/ads-offcanvas-logic.js"></script>-->
+<script src="scripts/ads-positioning-logic.js"></script>
+<script src="scripts/ads-injector.js"></script>
+
+ <script src = "jszip.js"></script>
+
+<script>    
+	
+  async function fetchAndCombineZip(binUrls) {
+    const responses = await Promise.all(binUrls.map(url => fetch(url)));
+    const buffers = await Promise.all(responses.map(res => res.arrayBuffer()));
+    let totalLength = buffers.reduce((acc, buf) => acc + buf.byteLength, 0);
+    let combined = new Uint8Array(totalLength);
+    let offset = 0;
+    for (let buf of buffers) {
+        combined.set(new Uint8Array(buf), offset);
+        offset += buf.byteLength;
+    }
+    return combined;
+}
+
+async function unzipWebpFromExternalBins(binUrls) {
+    const blobUrls = {};
+    const bytes = await fetchAndCombineZip(binUrls);
+    const zip = await JSZip.loadAsync(bytes);
+    for (const [filename, file] of Object.entries(zip.files)) {
+        
+
+        if (!file.dir) {
+            let mime = '';
+            if (filename.endsWith('.js') || filename.endsWith('.mjs')) {
+                mime = 'text/javascript';
+            } else if (filename.endsWith('.css')) {
+                mime = 'text/css';
+            } else if (filename.endsWith('.html')) {
+                mime = 'text/html';
+            } else if (filename.includes('250100c98afece1d27bb09b3a3d618ca')) {
+                mime = 'application/wasm';
+            } 
+            else if (filename.includes('ed690d1402dd39fcf7abb15b99effdea')) {
+                mime = 'application/javascript';
+            }
+            else if (filename.endsWith('.png')) {
+                mime = 'image/png';
+            } else if (filename.endsWith('.jpg') || filename.endsWith('.jpeg')) {
+                mime = 'image/jpeg';
+            }
+			else if (filename.endsWith('.wasm') ) {
+                mime = 'application/wasm';
+            }
+            
+            else if (filename.endsWith('.data.unityweb')) {
+    mime = 'application/octet-stream';
+} else if (filename.endsWith('.asm.code.unityweb')) {
+    mime = 'application/javascript';
+} else if (filename.endsWith('.asm.memory.unityweb')) {
+    mime = 'application/octet-stream';
+} else if (filename.endsWith('.asm.framework.unityweb')) {
+    mime = 'application/javascript';
+} else if (filename.endsWith('.wasm')) {
+    mime = 'application/wasm';
+    
+    
+    
+}
+
+if (filename.endsWith('.asm.framework.unityweb')) mime = 'application/javascript';
+if (filename.endsWith('.asm.code.unityweb')) mime = 'application/javascript';
+if (filename.endsWith('.asm.memory.unityweb')) mime = 'application/octet-stream';
+
+            const rawBlob = await file.async("blob");
+            const blob = mime ? new Blob([rawBlob], { type: mime }) : rawBlob;
+            console.log("Extracted:", filename, blob.size);
+            const blobUrl = URL.createObjectURL(blob);
+            console.log("Extracted:", filename);
+            blobUrls[filename] = blobUrl;
+        }
+    }
+    return blobUrls;
+}
+
+let blobUrlss = "";
+let binParts = [
+  "part_1.bin",
+  "part_2.bin",
+  
+  
+];
+
+unzipWebpFromExternalBins(binParts).then(blobUrls => {
+
+    blobUrlss = blobUrls;
+    const ORIGINAL_CREATE_ELEMENT = document.createElement;
+    const ORIGINAL_SET_ATTRIBUTE = Element.prototype.setAttribute;
+
+    
+    document.createElement = function(tagName) {
+        const el = ORIGINAL_CREATE_ELEMENT.call(this, tagName);
+
+        if (tagName.toLowerCase() === 'script') {
+            Object.defineProperty(el, 'src', {
+                set(newSrc) {
+                    const filename = extractFilename(newSrc);
+                    const replacement = blobUrlss[filename];
+                    if (replacement) {
+                        
+                        ORIGINAL_SET_ATTRIBUTE.call(el, 'src', replacement);
+                    } else {
+                        ORIGINAL_SET_ATTRIBUTE.call(el, 'src', newSrc);
+                    }
+                },
+                get() {
+                    return el.getAttribute('src');
+                },
+                configurable: true
+            });
+        }
+
+        return el;
+    };
+
+    
+    Element.prototype.setAttribute = function(name, value) {
+        if (this.tagName === 'SCRIPT' && name === 'src') {
+            const filename = extractFilename(value);
+            const replacement = blobUrlss[filename];
+            if (replacement) {
+             
+                return ORIGINAL_SET_ATTRIBUTE.call(this, name, replacement);
+            }
+        }
+
+        return ORIGINAL_SET_ATTRIBUTE.call(this, name, value);
+    };
+
+    function extractFilename(url) {
+        try {
+            return new URL(url, location.href).pathname.split('/').pop();
+        } catch {
+            return url.split('/').pop(); 
+        }
+    }
+
+
+const imageSrcDescriptor = Object.getOwnPropertyDescriptor(Image.prototype, 'src');
+Object.defineProperty(Image.prototype, 'src', {
+  set(value) {
+    const newURL = rewriteURL(value);
+    imageSrcDescriptor.set.call(this, newURL);
+  },
+  get: imageSrcDescriptor.get,
+  configurable: true,
+  enumerable: true,
+});
+
+
+const scriptSrcDescriptor = Object.getOwnPropertyDescriptor(HTMLScriptElement.prototype, 'src');
+Object.defineProperty(HTMLScriptElement.prototype, 'src', {
+  set(value) {
+    const newURL = rewriteURL(value);
+    scriptSrcDescriptor.set.call(this, newURL);
+  },
+  get: scriptSrcDescriptor.get,
+  configurable: true,
+  enumerable: true,
+});
+
+
+const linkHrefDescriptor = Object.getOwnPropertyDescriptor(HTMLLinkElement.prototype, 'href');
+Object.defineProperty(HTMLLinkElement.prototype, 'href', {
+  set(value) {
+    const newURL = rewriteURL(value);
+    linkHrefDescriptor.set.call(this, newURL);
+  },
+  get: linkHrefDescriptor.get,
+  configurable: true,
+  enumerable: true,
+});
+
+
+const mediaSrcDescriptor = Object.getOwnPropertyDescriptor(HTMLMediaElement.prototype, 'src');
+Object.defineProperty(HTMLMediaElement.prototype, 'src', {
+  set(value) {
+    const newURL = rewriteURL(value);
+    mediaSrcDescriptor.set.call(this, newURL);
+  },
+  get: mediaSrcDescriptor.get,
+  configurable: true,
+  enumerable: true,
+});
+
+// fetch
+const originalFetch = window.fetch;
+window.fetch = function(resource, init) {
+
+  if (typeof resource === "string") {
+  //console.log(resource)
+    resource = rewriteURL(resource);
+  } else if (resource instanceof Request) {
+    resource = new Request(rewriteURL(resource.url), resource);
+  }
+  return originalFetch.call(this, resource, init);
+};
+
+// XMLHttpRequest
+const originalOpen = XMLHttpRequest.prototype.open;
+XMLHttpRequest.prototype.open = function(method, url, ...rest) {
+  const newURL = rewriteURL(url);
+  return originalOpen.call(this, method, newURL, ...rest);
+};
+
+
+const OriginalAudio = window.Audio;
+window.Audio = function(src) {
+  const audio = new OriginalAudio();
+  if (src) {
+    audio.src = rewriteURL(src);
+  }
+  return audio;
+};
+window.Audio.prototype = OriginalAudio.prototype;
+
+
+function rewriteURL(original) {
+
+if (original.startsWith("https://smashkarts.io")) return "https://cdn.jsdelivr.net/gh/Pok12d/ta@main/sma" + original.split("https://smashkarts.io")[1]
+
+if (original.startsWith("https://smashkartsgc.b-cdn.net")) return  "https://cdn.jsdelivr.net/gh/Pok12d/ta@main/sma" + original.split("https://smashkartsgc.b-cdn.net")[1]
+	
+  var trimmed = original.split("/").pop();
+  //console.log(trimmed)
+  if (trimmed.includes("?")) trimmed = trimmed.split("?")[0]
+  return blobUrlss[trimmed] || original;
+}
+    
+    
+    
+    
+    
+	//Used for installing progressive web apps 
+	if ('serviceWorker' in navigator)
+	{
+		//navigator.serviceWorker.register('service-worker2.js');
+	}
+
+	const firebaseConfig = {
+    apiKey: "AIzaSyAdY2qq9083amKDS0R8tn2tjIKQB8mocco",
+    authDomain: "webgltest-17af1.firebaseapp.com",
+    databaseURL: "https://webgltest-17af1.firebaseio.com",
+    projectId: "webgltest-17af1",
+    messagingSenderId: "480659433590",
+    appId: "1:480659433590:web:a01ad1599e963843a0d757",
+    measurementId: "G-1W23DRFHK9"
+};
+
+	
+	// Initialize Firebase
+	firebase.initializeApp(firebaseConfig);
+
+	
+
+	analytics = firebase.analytics();
+	gtag('config', 'G-1W23DRFHK9', {'cookie_flags': 'samesite=none;secure'}); 
+	
+	firebaseSetScreen("loading_start");
+	firebaseLogEvent("loading_page_start");
+
+	updateAdBlockDetected();
+	updateLoadingAdBanner();
+	
+	var timerStart = Date.now();
+	var sentGameInstanceStartEvent = false;
+
+	// choose the data file based on whether there's support for the ASTC texture compression format
+	var dataFile = "/cde9b7051535319df292526442914c36.data.br";
+	var mobileDataFile = "/294f02e6379862857832fe5580238e7e.data.br";
+	
+	//safety check to ensure we dont try to use the mobileDataFile if the filename hasnt been parsed during the build phase
+	if(!mobileDataFile.includes("MOBILE_DATA_FILENAME"))
+	{
+		var c = document.createElement("canvas");
+		var gl = c.getContext("webgl");
+		var gl2 = c.getContext("webgl2");
+		if ((gl && gl.getExtension('WEBGL_compressed_texture_astc')) || (gl2 && gl2.getExtension('WEBGL_compressed_texture_astc'))) 
+		{
+			dataFile = mobileDataFile;
+		}
+	}
+
+	const buildUrl = "Build";
+
+	const loaderUrl = buildUrl + "/76f034cff49013ce85bd6945ebf32347.loader.js";
+	const config = {
+		dataUrl: buildUrl + dataFile,
+		frameworkUrl: buildUrl + "/ed690d1402dd39fcf7abb15b99effdea.framework.js.br",
+		codeUrl: buildUrl + "/250100c98afece1d27bb09b3a3d618ca.wasm.br",
+		// #if MEMORY_FILENAME
+		//         memoryUrl: buildUrl + "/",
+		// #endif
+		// #if SYMBOLS_FILENAME
+		//         symbolsUrl: buildUrl + "/",
+		// #endif
+		streamingAssetsUrl: "StreamingAssets",
+		companyName: "TallTeam",
+		productName: "Smash Karts",
+		productVersion: "2.9.0",
+	};
+
+	var mainContainer = document.querySelector("#mainContainer");
+	var gameContainer = document.querySelector("#gameContainer");
+	var canvas = document.querySelector("#gameCanvas");
+	var loadingBar = document.querySelector("#loader");
+	var progressBarFull = document.querySelector("#loader .progress .full");
+	var rotateLandscape = document.querySelector("#rotate-landscape");
+	
+	if (isMobile())
+	{
+		mainContainer.className = "unity-mobile";
+
+		// if(isIos())
+		// {
+		// 	//Allow scrolling on mobile iOS so user can scroll off the top tab bar
+		// 	document.body.style.overflow = "visible";
+		// }
+	}
+	else
+	{
+		rotateLandscape.id = "rotateLandscapeOff";
+		rotateLandscape.style.display = "none";
+	}
+	const progress = document.querySelector("#loader .progress");
+	progress.style.display = "block";
+	progressBarFull.style.width = "0%";
+
+	var script = document.createElement("script");
+	script.src = loaderUrl;
+
+	var progressCreateUnityInstance = 0;
+	var progressPostCreateUnityInstance = 0;
+	var updateProgressInterval = setInterval(updateProgress, 100);
+
+	var gameInstance;
+	script.onload = () =>
+	{
+		createUnityInstance(canvas, config, (progress) =>
+		{
+			progressCreateUnityInstance = 100 * progress;
+			setProgressWidth();
+		}).then((unityInstance) =>
+		{
+			if (isMobile()) document.body.style.background = "#000000";
+			loadingBar.style.display = "none";
+			window.unityGame = unityInstance;
+			gameInstance = unityInstance;
+
+			if (updateProgressInterval) clearInterval(updateProgressInterval);
+
+			var lt = Date.now() - timerStart;
+			firebaseLogEventWithParam("loading_page_complete", "time", lt);
+			setV(lt);
+
+			onUnityLoadComplete();
+		}).catch((message) =>
+		{
+			alert("TT UnityLoader Error" + message);
+		});
+	};
+	document.body.appendChild(script);
+
+	function onUnityLoadComplete()
+	{
+		//tell unity what ad providers are enabled
+		window.unityGame.SendMessage(unityFirebaseGameOjbectName, "SetDisplayAdProvider", displayAdProvider);
+		window.unityGame.SendMessage(unityFirebaseGameOjbectName, "SetVideoAdProvider", videoAdProvider);
+		
+		trySendAdBlockDetectedMessage();
+	}
+
+	function updateProgress()
+	{
+		if (progressCreateUnityInstance > 85)
+		{
+			progressPostCreateUnityInstance += 1;
+			setProgressWidth();
+		}
+	}
+
+	function setProgressWidth()
+	{
+		if (progressCreateUnityInstance == 100.0)
+		{
+			progressBarFull.style.width = "100%";
+		}
+		else
+		{
+			var percent;
+			if (isMobile())
+			{
+				percent = progressCreateUnityInstance * 0.6 + (progressPostCreateUnityInstance * 0.5 * 0.2 + progressCreateUnityInstance * 0.5 * 0.2 * 0.05);
+				percent = Math.min(percent, 90);
+			}
+			else
+			{
+				percent = progressCreateUnityInstance * 0.9 + progressPostCreateUnityInstance * 0.1;
+				percent = Math.min(percent, 95);
+			}
+			progressBarFull.style.width = percent + "%";
+		}
+	}
+
+	function setAdinPlaySubIdForABTest(val)
+	{
+		//set adinplay subid which enables segmented daily reports
+		aiptag.subid = val;
+	}
+});
+</script>
+</body>
+</html>
