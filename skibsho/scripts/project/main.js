@@ -8,7 +8,7 @@ runOnStartup(async runtime =>
 	// Code to run on the loading screen.
 	let script = document.createElement('script');
 	script.type = 'text/javascript';
-	script.src = 'https://game-cdn.poki.com/scripts/v2/poki-sdk.js';    
+	script.src = 'poki-sdk.js';    
 	document.head.appendChild(script);
 	script.onload = () => {
 	is_poki_added = true;
