@@ -1,0 +1,37 @@
+{
+  "crossPromoItems": [
+    {
+      "activeSeasonId": "s17",
+      "audienceSessionMinCount": 5,
+      "audienceSource": "home,partners",
+      "dontShowIfPurchasedIAPs": "com.tallteam.citychase.s17bundle0-com.tallteam.citychase.s17bundle1-com.tallteam.citychase.s17bundle2",
+      "id": "s17bundle0",
+      "imageUrl": "https://smashkartsgc.b-cdn.net/promos/updates/promo-bundle1-v1.png",
+      "isShopPromo": true,
+      "shopItemId": "com.tallteam.citychase.s17bundle0",
+      "minGameVer": "3.6.0"
+    },
+    {
+      "activeSeasonId": "s17",
+      "audienceSessionMinCount": 5,
+      "audienceSource": "home,partners",
+      "dontShowIfPurchasedIAPs": "com.tallteam.citychase.s17bundle0-com.tallteam.citychase.s17bundle1-com.tallteam.citychase.s17bundle2",
+      "id": "s17bundle1",
+      "imageUrl": "https://smashkartsgc.b-cdn.net/promos/updates/promo-bundle2-v1.png",
+      "isShopPromo": true,
+      "shopItemId": "com.tallteam.citychase.s17bundle1",
+      "minGameVer": "3.6.0"
+    },
+    {
+      "activeSeasonId": "s17",
+      "audienceSessionMinCount": 5,
+      "audienceSource": "home,partners",
+      "dontShowIfPurchasedIAPs": "com.tallteam.citychase.s17bundle0-com.tallteam.citychase.s17bundle1-com.tallteam.citychase.s17bundle2",
+      "id": "s17bundle2",
+      "imageUrl": "https://smashkartsgc.b-cdn.net/promos/updates/promo-bundle3-v1.png",
+      "isShopPromo": true,
+      "shopItemId": "com.tallteam.citychase.s17bundle2",
+      "minGameVer": "3.6.0"
+    }
+  ]
+}
